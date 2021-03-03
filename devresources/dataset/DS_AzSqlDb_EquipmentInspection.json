@@ -1,0 +1,21 @@
+{
+	"name": "DS_AzSqlDb_EquipmentInspection",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzSqlDb_EquipmentInspection",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SourceSchema": {
+				"type": "string"
+			},
+			"SourceTable": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
