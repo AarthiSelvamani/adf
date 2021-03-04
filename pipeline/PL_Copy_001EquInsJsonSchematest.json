@@ -1,0 +1,226 @@
+{
+	"name": "PL_Copy_001EquInsJsonSchematest",
+	"properties": {
+		"activities": [
+			{
+				"name": "Cp_EquipInsJsonSchema",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "SELECT  JsonSchemaId\n      ,Identifier\n      ,Data\n      ,Description\n      ,CreatedBy\n      ,CreatedDate\n      ,UpdatedBy\n      ,UpdatedDate\n         ,CURRENT_TIMESTAMP as RECORD_INSERT_TS\n\t  ,CURRENT_TIMESTAMP as RECORD_UPDATE_TS\n\t  ,'Eq001EquipInspectionJsonSchema' as RECORD_INSERT_PROGRAM_NM\n\t  ,'N' as RECORD_DELETE_FG\n  FROM @{pipeline().parameters.SourceSchema}.@{pipeline().parameters.SourceTable}",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SnowflakeSink",
+						"preCopyScript": "TRUNCATE TABLE MAINTENANCE.EQUIP_INSPECTION_JSONSCHEMA",
+						"importSettings": {
+							"type": "SnowflakeImportCopyCommand",
+							"additionalCopyOptions": {
+								"ON_ERROR": "CONTINUE"
+							}
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "LS_AzBlobStore_adfstaging",
+							"type": "LinkedServiceReference"
+						},
+						"enableCompression": true
+					},
+					"enableSkipIncompatibleRow": true,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "JsonSchemaId",
+									"type": "Int64"
+								},
+								"sink": {
+									"name": "JSON_SCHEMA_ID",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "Identifier",
+									"type": "String"
+								},
+								"sink": {
+									"name": "IDENTIFIER",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Data",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DATA_TX"
+								}
+							},
+							{
+								"source": {
+									"name": "Description",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DESCRIPTION",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CreatedBy",
+									"type": "Guid"
+								},
+								"sink": {
+									"name": "CREATED_BY",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CreatedDate",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "CREATED_DATE",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "UpdatedBy",
+									"type": "Guid"
+								},
+								"sink": {
+									"name": "UPDATED_BY",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UpdatedDate",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "UPDATED_DATE",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "RECORD_INSERT_TS",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "RECORD_INSERT_TS",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "RECORD_UPDATE_TS",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "RECORD_UPDATE_TS",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "RECORD_INSERT_PROGRAM_NM",
+									"type": "String"
+								},
+								"sink": {
+									"name": "RECORD_INSERT_PROGRAM_NM",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "RECORD_DELETE_FG",
+									"type": "String"
+								},
+								"sink": {
+									"name": "RECORD_DELETE_FG",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_AzSqlDb_EquipmentInspection3",
+						"type": "DatasetReference",
+						"parameters": {
+							"SourceSchema": {
+								"value": "@pipeline().parameters.SourceSchema",
+								"type": "Expression"
+							},
+							"SourceTable": {
+								"value": "@pipeline().parameters.SourceTable",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_SnowFlake_EquipmentInspection3",
+						"type": "DatasetReference",
+						"parameters": {
+							"TargetSchema": {
+								"value": "@pipeline().parameters.TargetSchema",
+								"type": "Expression"
+							},
+							"TargetTable": {
+								"value": "@pipeline().parameters.TargetTable",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"SourceSchema": {
+				"type": "string",
+				"defaultValue": "dbo"
+			},
+			"SourceTable": {
+				"type": "string",
+				"defaultValue": "JsonSchema"
+			},
+			"TargetSchema": {
+				"type": "string",
+				"defaultValue": "MAINTENANCE"
+			},
+			"TargetTable": {
+				"type": "string",
+				"defaultValue": "EQUIP_INSPECTION_JSONSCHEMA"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-03-03T23:00:45Z"
+	}
+}
