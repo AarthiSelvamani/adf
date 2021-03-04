@@ -1,0 +1,30 @@
+{
+	"name": "DS_SnowFlake_EquipmentInspection",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SnowFlake_EquipmentInspection",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TargetSchema": {
+				"type": "string"
+			},
+			"TargetTable": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "SnowflakeTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().TargetSchema",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().TargetTable",
+				"type": "Expression"
+			}
+		}
+	}
+}
